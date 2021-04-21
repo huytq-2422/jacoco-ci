@@ -11,15 +11,14 @@ project.afterEvaluate {
         def testTaskName = "test${variantName.capitalize()}UnitTest"
 
         tasks.create(name: "${testTaskName}Coverage", type: JacocoReport, dependsOn: "$testTaskName") {
-            // Line 2 & 3
             group = "Reporting"
             description = "Generate Jacoco coverage reports for the ${variantName.capitalize()} build."
 
             reports {
-                html.enabled = true // Line 5
+                html.enabled = true 
                 xml.enabled = true
             }
-            def excludes = [ // Line 10
+            def excludes = [ 
                              'jdk.internal.*',
                              '**/R.class',
                              '**/R$*.class',
