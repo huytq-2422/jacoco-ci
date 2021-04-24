@@ -24,14 +24,9 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
     - name: Check lint and test 
-      run: ./gradlew lint testDebugUnitTestCoverage testReleaseUnitTestCoverage 
+      run: ./gradlew lint testDebugUnitTestCoverage 
     - name: Archive test results
       uses: actions/upload-artifact@v2
       with:
         name: Test Results
-        path: app/build/reports/jacoco/testDebugUnitTestCoverage/html/index.html
-    - name: Archive test coverage results
-      uses: actions/upload-artifact@v2
-      with:
-        name: Test Results
-        path: app/build/reports/lint-results.html
+        path: app/build/reports
