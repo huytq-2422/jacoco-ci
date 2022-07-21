@@ -40,3 +40,11 @@ jobs:
         -F "distribution_key=${{secrets.DEPLOYGATE_DISTRIBUTION_KEY}}" \
         -F "release_note=Release Note" \
         "https://deploygate.com/api/users/${{secrets.DEPLOYGATE_USER}}/apps"
+    - name: Distribute App 2
+      run: |
+       curl \
+         -H 'Content-Type: application/json' \
+         -X POST https://chat.googleapis.com/v1/spaces/${GOOGLE_CHAT_SPACE_ID}/messages?key=${GOOGLE_CHAT_API_KEY}&token=${GOOGLE_CHAT_TOKEN}&threadKey=${GOOGLE_CHAT_THREAD_KEY} \
+         --data '{"text": "${CI_COMMIT_AUTHOR}: New Android version is available at ${DEPLOYGATE_SHARING_URL}"}'
+        
+  
