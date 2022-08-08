@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - env:
+          JSON: ""
     - uses: actions/checkout@v2
     - name: set up JDK 11
       uses: actions/setup-java@v2
@@ -39,7 +41,7 @@ jobs:
         -F "message=Any message" \
         -F "distribution_key=${{secrets.DEPLOYGATE_DISTRIBUTION_KEY}}" \
         -F "release_note=Release Note" \
-        "https://deploygate.com/api/users/${{secrets.DEPLOYGATE_USER}}/apps"  > $HOME/pr.json
+        "https://deploygate.com/api/users/${{secrets.DEPLOYGATE_USER}}/apps"  > $JSON
        echo "GIT_EMAIL=$(jq -r '.file' $HOME/pr.json)"
     - name: Distribute App 2
       run: |
