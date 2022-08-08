@@ -30,3 +30,26 @@ jobs:
       with:
         name: Test Results
         path: app/build/reports
+    # The following is uploading debug apk to the deploygate
+    - name: Distribute App
+      run: |
+       curl \
+        -H "Authorization: token ${{secrets.DEPLOYGATE_API_KEY}}" \
+        -F "file=@app/build/outputs/apk/debug/app-debug.apk" \
+        -F "message=Any message" \
+        -F "distribution_key=${{secrets.DEPLOYGATE_DISTRIBUTION_KEY}}" \
+        -F "release_note=Release Note" \
+        "https://deploygate.com/api/users/${{secrets.DEPLOYGATE_USER}}/apps"
+    - name: Distribute App 2
+      run: |
+        curl \
+              -H "Content-Type: application/json" \
+              -X POST "${{secrets.GOOGLE_CHAT_WEBHOOK_API}}" \
+              --data "{\"cards\": [{\"sections\":[{\"widgets\":[{\"keyValue\":{\"content\":\"${{CI_COMMIT_AUTHOR}}\",\"contentMultiline\":false,\"icon\":\"PERSON\",\"onClick\":{\"openLink\":{\"url\":\"mailto:${GITLAB_USER_EMAIL}\"}}}}]},{\"widgets\":[{\"image\":{\"imageUrl\":\"${DEPLOYGATE_DISTRIBUTION_QR_CODE_IMAGE_URL}\",\"altText\":\"\",\"onClick\":{\"openLink\":{\"url\":\"${DEPLOYGATE_SHARING_URL}\"}}}}]},{\"widgets\":[{\"buttons\":[{\"textButton\":{\"text\":\"DOWNLOAD\",\"onClick\":{\"openLink\":{\"url\":\"${DEPLOYGATE_SHARING_URL}\"}}}}]}]}],\"header\":{\"title\":\"The new version is released\",\"subtitle\":\"${COMMIT_TIME}\",\"imageUrl\":\"https://c.tenor.com/U7h-gyy--akAAAAM/kiss.gif\",\"imageStyle\":\"AVATAR\"}}]}"
+        fi
+#       curl \
+#         -H 'Content-Type: application/json' \
+#         -X POST https://chat.googleapis.com/v1/spaces/${GOOGLE_CHAT_SPACE_ID}/messages?key=${GOOGLE_CHAT_API_KEY}&token=${GOOGLE_CHAT_TOKEN}&threadKey=${GOOGLE_CHAT_THREAD_KEY} \
+#         --data '{"text": "${CI_COMMIT_AUTHOR}: New Android version is available at ${DEPLOYGATE_SHARING_URL}"}'
+        
+  
