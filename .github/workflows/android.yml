@@ -33,14 +33,14 @@ jobs:
     # The following is uploading debug apk to the deploygate
     - name: Distribute App
       run: |
-       response = curl \
+       curl \
         -H "Authorization: token ${{secrets.DEPLOYGATE_API_KEY}}" \
         -F "file=@app/build/outputs/apk/debug/app-debug.apk" \
         -F "message=Any message" \
         -F "distribution_key=${{secrets.DEPLOYGATE_DISTRIBUTION_KEY}}" \
         -F "release_note=Release Note" \
-        "https://deploygate.com/api/users/${{secrets.DEPLOYGATE_USER}}/apps"
-       echo "${{response}}"
+        "https://deploygate.com/api/users/${{secrets.DEPLOYGATE_USER}}/apps"  > $HOME/pr.json
+       echo "GIT_EMAIL=$(jq -r '.file' $HOME/pr.json)"
     - name: Distribute App 2
       run: |
        curl \
